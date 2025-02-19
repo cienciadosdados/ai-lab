@@ -1,6 +1,17 @@
+'use client';
+
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 export function FloatingGrid() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <div className="absolute inset-0 grid-pattern opacity-20" />
@@ -18,17 +29,17 @@ export function FloatingGrid() {
           key={i}
           className="absolute w-2 h-2 bg-blue-500/20 rounded-full"
           initial={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
+            x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
+            y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
           }}
           animate={{
             y: [
-              Math.random() * window.innerHeight,
-              Math.random() * window.innerHeight,
+              Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
+              Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
             ],
             x: [
-              Math.random() * window.innerWidth,
-              Math.random() * window.innerWidth,
+              Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
+              Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
             ],
           }}
           transition={{
