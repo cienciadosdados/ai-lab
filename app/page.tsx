@@ -46,11 +46,11 @@ export default function Page() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="text-xl text-gray-300"
               >
-                Aprenda na prática a desenvolver soluções avançadas com <span className="text-[#0c83fe]">LLM</span>, <span className="text-[#0c83fe]">RAG</span> e <span className="text-[#0c83fe]">Agentes</span> usando ferramentas como <span className="text-[#0c83fe]">CrewAI</span>, <span className="text-[#0c83fe]">langgraph</span>, <span className="text-[#0c83fe]">composio</span> e <span className="text-[#0c83fe]">Deep Research</span>.
+                Aprenda na prática a desenvolver soluções avançadas com <span className="text-[#0c83fe]">LLM</span>, <span className="text-[#0c83fe]">RAG</span> e <span className="text-[#0c83fe]">Agentes</span> usando ferramentas como <span className="text-[#0c83fe]">&quot;CrewAI&quot;</span>, <span className="text-[#0c83fe]">&quot;langgraph&quot;</span>, <span className="text-[#0c83fe]">&quot;composio&quot;</span> e <span className="text-[#0c83fe]">&quot;Deep Research&quot;</span>.
               </motion.p>
 
               {/* CTA Form - Mobile */}
-              <div className="lg:hidden">
+              <div className="lg:hidden mt-8">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
