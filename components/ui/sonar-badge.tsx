@@ -1,6 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
+import { useEffect } from 'react';
 
 interface SonarBadgeProps {
   text: string;
@@ -8,27 +9,31 @@ interface SonarBadgeProps {
 }
 
 export function SonarBadge({ text, className = "" }: SonarBadgeProps) {
+  const controls = useAnimation();
+
+  useEffect(() => {
+    controls.start({
+      scale: [1, 1.2],
+      opacity: [0.5, 0],
+      transition: {
+        duration: 2,
+        repeat: Infinity,
+        ease: "easeOut"
+      }
+    });
+  }, [controls]);
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       className={`relative inline-flex items-center gap-2 ${className}`}
     >
       <motion.div 
         className="absolute inset-0 bg-[#0c83fe]/5 rounded-full"
         initial={{ scale: 1, opacity: 0 }}
-        whileInView={{
-          scale: [1, 1.2],
-          opacity: [0.5, 0]
-        }}
-        viewport={{ once: false }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeOut"
-        }}
+        animate={controls}
       />
       <div className="relative px-4 py-2 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 flex items-center gap-2">
         <div className="relative">
@@ -36,11 +41,10 @@ export function SonarBadge({ text, className = "" }: SonarBadgeProps) {
           <motion.div
             className="absolute inset-0 bg-[#0c83fe] rounded-full"
             initial={{ scale: 1, opacity: 0 }}
-            whileInView={{
+            animate={{
               scale: [1, 2.5],
               opacity: [0.8, 0]
             }}
-            viewport={{ once: false }}
             transition={{
               duration: 2,
               repeat: Infinity,
@@ -51,10 +55,9 @@ export function SonarBadge({ text, className = "" }: SonarBadgeProps) {
         <motion.span 
           className="text-sm text-gray-300"
           initial={{ opacity: 0.8 }}
-          whileInView={{
+          animate={{
             opacity: [0.8, 1]
           }}
-          viewport={{ once: false }}
           transition={{
             duration: 2,
             repeat: Infinity,

@@ -18,108 +18,60 @@ export default function Page() {
       {/* Hero Section */}
       <section className="relative pt-20 md:pt-32 pb-20">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            <div className="space-y-8 relative z-10">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-              >
-                <div className="mb-8">
-                  <div className="relative inline-block">
-                    <div className="absolute inset-0 bg-[#0c83fe]/20 rounded-xl blur-xl"></div>
-                    <div className="relative px-6 py-3 rounded-xl bg-black/40 border border-[#0c83fe] backdrop-blur-sm">
-                      <h1 className="text-4xl md:text-5xl font-bold text-[#0c83fe]">
-                        AI Lab
-                      </h1>
-                    </div>
+          <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="space-y-8"
+            >
+              <div>
+                <div className="relative inline-block mb-4">
+                  <div className="absolute inset-0 bg-[#0c83fe]/20 rounded-xl blur-xl"></div>
+                  <div className="relative px-6 py-3 rounded-xl bg-black/40 border border-[#0c83fe] backdrop-blur-sm">
+                    <h1 className="text-4xl md:text-5xl font-bold text-[#0c83fe]">
+                      AI Lab
+                    </h1>
                   </div>
-                  <SonarBadge text="Build for the future" className="mt-6 mb-6" />
-                  <h2 className="text-4xl md:text-6xl font-bold mt-6">
-                    Criando Aplicações de<br />
-                    IA de Forma Profissional
-                  </h2>
                 </div>
-              </motion.div>
+                <SonarBadge text="Build for the future" className="mb-6" />
+                <h2 className="text-4xl md:text-6xl font-bold">
+                  Criando Aplicações de<br />
+                  IA de Forma Profissional
+                </h2>
+              </div>
               
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-xl text-gray-300"
+                className="text-xl text-gray-300 max-w-2xl mx-auto"
               >
-                Aprenda na prática a desenvolver soluções avançadas com <span className="text-[#0c83fe]">LLM</span>, <span className="text-[#0c83fe]">RAG</span> e <span className="text-[#0c83fe]">Agentes</span> usando ferramentas como <span className="text-[#0c83fe]">&quot;CrewAI&quot;</span>, <span className="text-[#0c83fe]">&quot;langgraph&quot;</span>, <span className="text-[#0c83fe]">&quot;composio&quot;</span> e <span className="text-[#0c83fe]">&quot;Deep Research&quot;</span>.
+                Aprenda na prática a desenvolver soluções avançadas com{" "}
+                <span className="text-[#0c83fe]">LLM</span>,{" "}
+                <span className="text-[#0c83fe]">RAG</span> e{" "}
+                <span className="text-[#0c83fe]">Agentes</span> usando ferramentas como{" "}
+                <span className="text-[#0c83fe]">"CrewAI"</span>,{" "}
+                <span className="text-[#0c83fe]">"langGraph"</span>,{" "}
+                <span className="text-[#0c83fe]">"composio"</span> e{" "}
+                <span className="text-[#0c83fe]">"Open Research"</span>.
               </motion.p>
 
-              {/* CTA Form - Mobile */}
-              <div className="lg:hidden mt-8">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5 }}
-                  className="relative"
-                >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="max-w-md mx-auto w-full"
+              >
+                <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-2xl blur-2xl" />
-                  <div className="relative bg-black/40 backdrop-blur-sm p-8 rounded-2xl border border-[#0c83fe]/20">
-                    <div className="mb-8 text-center">
-                      <h2 className="text-2xl font-bold mb-2">Garanta Sua Vaga Agora!</h2>
-                      <p className="text-gray-400">Vagas Limitadas - Turma Exclusiva - 100% online e Gratuito</p>
-                    </div>
+                  <div className="relative bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8">
+                    <h3 className="text-2xl font-bold mb-6 text-center">Garanta Sua Vaga Agora!</h3>
+                    <p className="text-gray-400 mb-6 text-center">Vagas Limitadas - Turma Exclusiva - 100% online e Gratuito</p>
                     <LeadForm />
                   </div>
-                </motion.div>
-              </div>
-              
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="grid md:grid-cols-3 gap-4"
-              >
-                {[
-                  {
-                    title: "4 Dias Intensivos",
-                    description: "Imersão completa em desenvolvimento de IA"
-                  },
-                  {
-                    title: "Projetos Práticos",
-                    description: "Construa aplicações reais durante o treinamento"
-                  },
-                  {
-                    title: "Hands-on",
-                    description: "Aprenda fazendo, com exercícios práticos"
-                  }
-                ].map((feature, index) => (
-                  <FeatureCard
-                    key={index}
-                    title={feature.title}
-                    description={feature.description}
-                    delay={index}
-                  />
-                ))}
-              </motion.div>
-            </div>
-            
-            {/* CTA Form - Desktop */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="relative hidden lg:block"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-2xl blur-2xl" />
-              <div className="relative bg-black/40 backdrop-blur-sm p-8 rounded-2xl border border-[#0c83fe]/20">
-                <div className="mb-8 text-center">
-                  <h2 className="text-2xl font-bold mb-2">Garanta Sua Vaga Agora!</h2>
-                  <p className="text-gray-400">Vagas Limitadas - Turma Exclusiva - 100% online e Gratuito</p>
                 </div>
-                <LeadForm />
-              </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
@@ -224,6 +176,7 @@ export default function Page() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
                 className="relative group"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
