@@ -61,14 +61,16 @@ export default function Page() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="max-w-md mx-auto w-full"
+                className="w-full max-w-2xl mx-auto"
               >
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-2xl blur-2xl" />
                   <div className="relative bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8">
                     <h3 className="text-2xl font-bold mb-6 text-center">Garanta Sua Vaga Agora!</h3>
-                    <p className="text-gray-400 mb-6 text-center">Vagas Limitadas - Turma Exclusiva - 100% online e Gratuito</p>
-                    <LeadForm />
+                    <p className="text-gray-400 mb-8 text-center">Vagas Limitadas - Turma Exclusiva - 100% online e Gratuito</p>
+                    <div className="max-w-md mx-auto">
+                      <LeadForm />
+                    </div>
                   </div>
                 </div>
               </motion.div>
