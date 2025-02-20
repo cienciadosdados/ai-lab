@@ -20,7 +20,6 @@ export default function Page() {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div className="space-y-8 relative z-10">
-              <SonarBadge text="Build for the future" className="mb-8" />
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -35,6 +34,7 @@ export default function Page() {
                       </h1>
                     </div>
                   </div>
+                  <SonarBadge text="Build for the future" className="mt-6 mb-6" />
                   <h2 className="text-4xl md:text-6xl font-bold mt-6">
                     Criando Aplicações de<br />
                     IA de Forma Profissional
