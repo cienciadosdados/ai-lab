@@ -8,17 +8,19 @@ import { GlowingButton } from "@/components/ui/glowing-button"
 import { TechHighlight } from "@/components/ui/tech-highlight"
 import { Footer } from "@/components/Footer"
 import { motion } from "framer-motion"
+import { SonarBadge } from "@/components/ui/sonar-badge"
 
 export default function Page() {
   return (
     <main className="relative min-h-screen bg-black text-white overflow-hidden">
       <FloatingGrid />
-      
+
       {/* Hero Section */}
       <section className="relative pt-20 md:pt-32 pb-20">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div className="space-y-8 relative z-10">
+              <SonarBadge text="Build for the future" className="mb-8" />
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
