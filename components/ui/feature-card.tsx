@@ -1,3 +1,5 @@
+'use client';
+
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 
@@ -14,7 +16,7 @@ export function FeatureCard({ title, description, icon, delay = 0, className = "
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: delay * 0.1 }}
       whileHover={{ scale: 1.02 }}
       className={`relative group ${className}`}
