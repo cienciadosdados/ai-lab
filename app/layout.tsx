@@ -7,6 +7,8 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   themeColor: '#ffffff',
+  minimumScale: 1,
+  maximumScale: 5,
 };
 
 export const metadata: Metadata = {
@@ -45,6 +47,7 @@ export default function RootLayout({
           href="/images/hero-bg.webp"
           as="image"
           type="image/webp"
+          fetchPriority="high"
         />
         <link
           rel="preconnect" 
@@ -69,16 +72,47 @@ export default function RootLayout({
         {/* Cache-Control header */}
         <meta httpEquiv="Cache-Control" content="public, max-age=31536000, immutable" />
         
-        {/* Service Worker Registration */}
+        {/* Otimizações para mobile */}
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        
+        {/* Detecção de conexão lenta */}
+        <Script id="connection-detection" strategy="beforeInteractive">
+          {`
+            // Detectar conexão lenta e adicionar classe para otimizações
+            if ('connection' in navigator) {
+              if (navigator.connection.saveData || 
+                  navigator.connection.effectiveType === 'slow-2g' || 
+                  navigator.connection.effectiveType === '2g' || 
+                  navigator.connection.effectiveType === '3g') {
+                document.documentElement.classList.add('save-data');
+              }
+            }
+          `}
+        </Script>
+        
+        {/* Service Worker Registration - Carregado de forma assíncrona para não bloquear renderização */}
         <Script 
           id="register-service-worker" 
           src="/register-sw.js"
-          strategy="beforeInteractive"
+          strategy="lazyOnload"
         />
       </head>
       <body className={inter.className}>
-        {/* Google Tag Manager */}
-        <Script id="google-tag-manager" strategy="afterInteractive">
+        {/* Conteúdo principal primeiro, scripts depois */}
+        {children}
+        
+        {/* Script de otimização de imagens */}
+        <Script 
+          id="image-optimizer" 
+          src="/image-optimizer.js"
+          strategy="afterInteractive"
+        />
+        
+        {/* Google Tag Manager - Movido para depois do conteúdo principal */}
+        <Script id="google-tag-manager" strategy="lazyOnload">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -173,8 +207,6 @@ export default function RootLayout({
             src="https://www.facebook.com/tr?id=XXXXXXXXXXXXXXXXX&ev=PageView&noscript=1"
           />
         </noscript>
-        
-        {children}
       </body>
     </html>
   )

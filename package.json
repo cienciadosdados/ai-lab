@@ -6,7 +6,10 @@
     "dev": "next dev --port 3000 --hostname 0.0.0.0",
     "build": "next build",
     "start": "next start --port 3000 --hostname 0.0.0.0",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "ANALYZE=true next build",
+    "lighthouse": "lighthouse http://localhost:3000 --view",
+    "analyze-performance": "node scripts/analyze-performance.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.0",
@@ -29,12 +32,18 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^14.2.24",
     "@types/node": "^20.11.6",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
+    "brotli-webpack-plugin": "^1.1.0",
+    "compression-webpack-plugin": "^10.0.0",
+    "css-minimizer-webpack-plugin": "^5.0.1",
     "eslint": "^8.56.0",
     "eslint-config-next": "14.2.4",
+    "lighthouse": "^11.7.1",
     "postcss": "^8",
+    "terser-webpack-plugin": "^5.3.12",
     "typescript": "^5.3.3"
   }
 }
