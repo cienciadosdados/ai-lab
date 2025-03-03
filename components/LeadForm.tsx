@@ -16,6 +16,15 @@ export function LeadForm() {
           var formActionSearchParams = formActionUrl.searchParams.size > 0 ? formActionUrl.searchParams.toString() + '&' : '';
           var combinedParams = formActionSearchParams + pageParams.toString();
           form.action = formActionUrl.origin + formActionUrl.pathname + '?' + combinedParams;
+          
+          // Garantir que o redirecionamento funcione corretamente
+          form.addEventListener('submit', function(e) {
+            // Adicionar um campo hidden para o redirecionamento no momento do submit
+            var redirectInput = document.querySelector('input[name="redirect_to"]');
+            if (redirectInput) {
+              redirectInput.value = 'https://ai-lab-amber.vercel.app/obrigado?email=' + encodeURIComponent(document.getElementById('email').value);
+            }
+          });
         }
       `;
       document.body.appendChild(script);
@@ -42,17 +51,6 @@ export function LeadForm() {
             id="email"
             placeholder="Digite seu melhor e-mail"
             required
-            className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 transition-all duration-200"
-          />
-        </div>
-
-        <div>
-          <input
-            type="text"
-            autoComplete="off"
-            name="first_name"
-            id="first_name"
-            placeholder="Digite seu nome"
             className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 transition-all duration-200"
           />
         </div>
@@ -94,7 +92,7 @@ export function LeadForm() {
         </div>
 
         {/* Campo oculto para o redirecionamento */}
-        <input type="hidden" name="redirect_to" value="https://ai-lab-amber.vercel.app/obrigado?email={{email}}" />
+        <input type="hidden" name="redirect_to" value="https://ai-lab-amber.vercel.app/obrigado" />
 
         <button
           klicksend-form-submit-id='RxuyBWA'
