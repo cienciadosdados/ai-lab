@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FloatingGrid } from '@/components/ui/floating-grid';
+import { SonarBadge } from '@/components/ui/sonar-badge';
 
 export default function ThankYouPage() {
   const searchParams = useSearchParams();
@@ -51,27 +52,49 @@ export default function ThankYouPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mb-12"
           >
-            <h3 className="text-2xl font-bold mb-6">3 passos que você precisa seguir agora:</h3>
+            <div className="flex justify-center mb-4">
+              <SonarBadge text="IMPORTANTE" className="mb-2" />
+            </div>
+            
+            <div className="relative inline-block mb-8">
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#0c83fe]/30 via-[#0c83fe]/10 to-[#0c83fe]/30 rounded-lg blur-md"></div>
+              <h3 className="relative text-2xl md:text-3xl font-bold py-2 px-4 bg-black/60 backdrop-blur-sm rounded-lg border border-[#0c83fe]/40">
+                <motion.span 
+                  className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#0c83fe]"
+                  animate={{
+                    opacity: [0.7, 1]
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    ease: "easeInOut"
+                  }}
+                >
+                  3 passos que você precisa seguir agora:
+                </motion.span>
+              </h3>
+            </div>
             
             <div className="grid md:grid-cols-3 gap-6">
               {[
                 {
-                  title: "Entre no Grupo do Telegram",
-                  description: "Acesse o grupo exclusivo para receber atualizações e materiais",
-                  link: "https://t.me/cienciadosdadosraiz",
-                  buttonText: "Entrar no Telegram"
+                  title: "Entre no Grupo do WhatsApp",
+                  description: "Para garantir que você receberá todos os scripts dos projetos, é importante que esteja no grupo EXCLUSIVO, pois será nosso REPO oficial.",
+                  link: "https://chat.whatsapp.com/seu-link-do-grupo",
+                  buttonText: "PARTICIPAR DO GRUPO EXCLUSIVO"
                 },
                 {
-                  title: "Adicione ao Calendário",
-                  description: "Garanta sua presença salvando as datas do treinamento",
-                  link: "#",
-                  buttonText: "Adicionar ao Calendário"
+                  title: "Responda à Pesquisa",
+                  description: "O nosso objetivo é fazer com que você aproveite ao máximo esse evento! Queremos ouvir suas principais necessidades para garantir que o evento agregue em seus conhecimentos.",
+                  link: "https://forms.gle/fPz7UkdfnjzcBexX6",
+                  buttonText: "RESPONDER À PESQUISA"
                 },
                 {
-                  title: "Siga no Instagram",
-                  description: "Acompanhe conteúdos exclusivos e novidades",
-                  link: "https://www.instagram.com/cienciadosdados/",
-                  buttonText: "Seguir no Instagram"
+                  title: "Verifique seu E-mail",
+                  description: "Acesse seu e-mail e responda a pesquisa que te enviamos! Suas respostas são fundamentais para personalizarmos o conteúdo do evento.",
+                  link: `https://mail.google.com/mail/u/0/#search/from:cienciadosdados`,
+                  buttonText: "VERIFICAR E-MAIL"
                 }
               ].map((step, index) => (
                 <motion.div
@@ -117,7 +140,7 @@ export default function ThankYouPage() {
             </p>
             
             <div className="flex justify-center space-x-4 mt-8">
-              <Link href="/politicas" className="text-gray-400 hover:text-white text-sm">
+              <Link href="https://cienciadosdados.com/politica-privacidade" target="_blank" className="text-gray-400 hover:text-white text-sm">
                 Políticas de Privacidade
               </Link>
               <span className="text-gray-600">•</span>

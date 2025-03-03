@@ -28,8 +28,9 @@ export function LeadForm() {
     try {
       const validatedData = formSchema.parse(formData);
       
-      // Enviar dados para a Hotmart via webhook
-      const webhookUrl = process.env.NEXT_PUBLIC_HOTMART_WEBHOOK_URL || '';
+      // Obter o link do formulário do Hotmart das variáveis de ambiente
+      const formUrl = process.env.NEXT_PUBLIC_HOTMART_FORM_URL;
+      const formTag = process.env.NEXT_PUBLIC_HOTMART_FORM_TAG || 'AI-HackAgents-01-25';
       
       // Capturar UTM params do localStorage
       const utmSource = localStorage.getItem('utm_source') || '';
@@ -38,55 +39,45 @@ export function LeadForm() {
       const utmTerm = localStorage.getItem('utm_term') || '';
       const utmContent = localStorage.getItem('utm_content') || '';
       
-      // Preparar payload para o webhook
-      const payload = {
-        ...validatedData,
-        utmSource,
-        utmMedium,
-        utmCampaign,
-        utmTerm,
-        utmContent,
-        timestamp: new Date().toISOString(),
-        source: window.location.href
-      };
-      
-      try {
-        // Enviar dados para o webhook
-        if (webhookUrl) {
-          await fetch(webhookUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
-          });
-        }
+      // Método 1: Se temos um link direto para o formulário do Hotmart, podemos redirecionar para ele
+      if (formUrl) {
+        // Construir URL com parâmetros para pré-preencher o formulário do Hotmart
+        const hotmartUrl = new URL(formUrl);
+        hotmartUrl.searchParams.append('email', validatedData.email);
+        hotmartUrl.searchParams.append('phone', validatedData.whatsapp);
+        hotmartUrl.searchParams.append('tag', formTag);
         
-        // Registrar evento de conversão no Facebook Pixel
-        if (typeof window !== 'undefined' && (window as any).fbq) {
-          (window as any).fbq('track', 'Lead', {
-            content_name: 'AI Lab Registration',
-            content_category: 'Registration'
-          });
-        }
+        if (utmSource) hotmartUrl.searchParams.append('utm_source', utmSource);
+        if (utmMedium) hotmartUrl.searchParams.append('utm_medium', utmMedium);
+        if (utmCampaign) hotmartUrl.searchParams.append('utm_campaign', utmCampaign);
+        if (utmTerm) hotmartUrl.searchParams.append('utm_term', utmTerm);
+        if (utmContent) hotmartUrl.searchParams.append('utm_content', utmContent);
         
-        // Registrar evento de conversão no Google Analytics
-        if (typeof window !== 'undefined' && (window as any).gtag) {
-          (window as any).gtag('event', 'conversion', {
-            'send_to': 'AW-XXXXXXXXXX/XXXXXXXXXXXXXXXXXXXXXXXXX',
-            'event_category': 'Registration',
-            'event_label': 'AI Lab Lead'
-          });
-        }
-        
-        // Redirecionar para a página de agradecimento
-        router.push(`/obrigado?email=${encodeURIComponent(validatedData.email)}`);
-        
-      } catch (error) {
-        console.error('Erro ao enviar dados:', error);
-        // Mesmo com erro no webhook, redirecionar para não perder o lead
-        router.push(`/obrigado?email=${encodeURIComponent(validatedData.email)}`);
+        // Redirecionar para o formulário do Hotmart
+        window.location.href = hotmartUrl.toString();
+        return;
       }
+      
+      // Método 2: Se não temos um link direto, vamos para a página de agradecimento
+      // Registrar evento de conversão no Facebook Pixel
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'Lead', {
+          content_name: 'AI Lab Registration',
+          content_category: 'Registration'
+        });
+      }
+      
+      // Registrar evento de conversão no Google Analytics
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'conversion', {
+          'send_to': 'AW-XXXXXXXXXX/XXXXXXXXXXXXXXXXXXXXXXXXX',
+          'event_category': 'Registration',
+          'event_label': 'AI Lab Lead'
+        });
+      }
+      
+      // Redirecionar para a página de agradecimento
+      router.push(`/obrigado?email=${encodeURIComponent(validatedData.email)}`);
       
     } catch (error) {
       if (error instanceof z.ZodError) {
