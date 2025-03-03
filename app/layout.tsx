@@ -8,6 +8,11 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'AI Lab - Criando Aplicações de IA de Forma Profissional',
   description: 'Aprenda na prática a desenvolver soluções avançadas com LLM, RAG e Agentes usando ferramentas como CrewAI, langGraph, composio e Open Research.',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' }
+    ]
+  }
 };
 
 export default function RootLayout({
@@ -94,6 +99,12 @@ export default function RootLayout({
             });
           `}
         </Script>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#ffffff" />
       </head>
       <body className={inter.className}>
         {/* Google Tag Manager (noscript) */}
