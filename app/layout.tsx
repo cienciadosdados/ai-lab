@@ -1,9 +1,20 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Script from 'next/script';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'sans-serif'],
+});
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#ffffff',
+};
 
 export const metadata: Metadata = {
   title: 'AI Lab - Criando Aplicações de IA de Forma Profissional',
@@ -12,7 +23,19 @@ export const metadata: Metadata = {
     icon: [
       { url: '/favicon.ico', sizes: 'any' }
     ]
-  }
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    title: 'AI Lab - Criando Aplicações de IA de Forma Profissional',
+    description: 'Aprenda na prática a desenvolver soluções avançadas com LLM, RAG e Agentes usando ferramentas como CrewAI, langGraph, composio e Open Research.',
+    url: 'https://ai-labs.cienciadosdados.com/',
+    siteName: 'AI Lab',
+    locale: 'pt_BR',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({
@@ -50,8 +73,8 @@ export default function RootLayout({
           `}
         </Script>
         
-        {/* UTM Tracking Script */}
-        <Script id="utm-tracking" strategy="afterInteractive">
+        {/* UTM Tracking Script - Otimizado para carregar depois do conteúdo principal */}
+        <Script id="utm-tracking" strategy="lazyOnload">
           {`
             function getParameterByName(name) {
               var url = window.location.href;
@@ -100,7 +123,22 @@ export default function RootLayout({
           `}
         </Script>
         
+        {/* DNS Prefetch para domínios externos */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        
         {/* Preload de fontes e recursos críticos */}
+        <link
+          rel="preconnect" 
+          href="https://fonts.googleapis.com"
+        />
+        <link 
+          rel="preconnect" 
+          href="https://fonts.gstatic.com" 
+          crossOrigin=""
+        />
         <link
           rel="preload"
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
@@ -116,7 +154,6 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#ffffff" />
       </head>
       <body className={inter.className}>
         {/* Google Tag Manager (noscript) */}
