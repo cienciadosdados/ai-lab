@@ -39,21 +39,6 @@ export function LeadForm() {
           <p className="mt-2">Para mais informações, acesse: <a href="https://hotmart.com/pt-br/legal/privacidade-de-dados/" target="_blank" rel="noopener noreferrer" className="text-[#0c83fe] hover:underline">Política de Privacidade</a></p>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            autoComplete="off"
-            name="gdpr"
-            id="gdpr"
-            value="Concordo em receber os e-mails"
-            required
-            className="w-4 h-4 accent-[#0c83fe]"
-          />
-          <label htmlFor="gdpr" className="text-white text-sm">
-            Concordo em receber os e-mails
-          </label>
-        </div>
-
         {/* Campo oculto para o honeypot anti-spam */}
         <div style={{ position: "absolute", left: "-5000px" }} aria-hidden="true">
           <input type="text" autoComplete='new-password' name="b_7auoBJ9" tabIndex={-1} value="" />
