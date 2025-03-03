@@ -1,5 +1,8 @@
+'use client';
+
 import { useState } from 'react';
 import { z } from 'zod';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -9,6 +12,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export function LeadForm() {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [formData, setFormData] = useState<FormData>({
@@ -24,12 +28,66 @@ export function LeadForm() {
     try {
       const validatedData = formSchema.parse(formData);
       
-      // Aqui você pode enviar os dados para sua API
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulando envio
+      // Enviar dados para a Hotmart via webhook
+      const webhookUrl = process.env.NEXT_PUBLIC_HOTMART_WEBHOOK_URL || '';
       
-      // Limpar formulário após sucesso
-      setFormData({ email: '', whatsapp: '' });
-      alert('Dados enviados com sucesso!');
+      // Capturar UTM params do localStorage
+      const utmSource = localStorage.getItem('utm_source') || '';
+      const utmMedium = localStorage.getItem('utm_medium') || '';
+      const utmCampaign = localStorage.getItem('utm_campaign') || '';
+      const utmTerm = localStorage.getItem('utm_term') || '';
+      const utmContent = localStorage.getItem('utm_content') || '';
+      
+      // Preparar payload para o webhook
+      const payload = {
+        ...validatedData,
+        utmSource,
+        utmMedium,
+        utmCampaign,
+        utmTerm,
+        utmContent,
+        timestamp: new Date().toISOString(),
+        source: window.location.href
+      };
+      
+      try {
+        // Enviar dados para o webhook
+        if (webhookUrl) {
+          await fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+          });
+        }
+        
+        // Registrar evento de conversão no Facebook Pixel
+        if (typeof window !== 'undefined' && (window as any).fbq) {
+          (window as any).fbq('track', 'Lead', {
+            content_name: 'AI Lab Registration',
+            content_category: 'Registration'
+          });
+        }
+        
+        // Registrar evento de conversão no Google Analytics
+        if (typeof window !== 'undefined' && (window as any).gtag) {
+          (window as any).gtag('event', 'conversion', {
+            'send_to': 'AW-XXXXXXXXXX/XXXXXXXXXXXXXXXXXXXXXXXXX',
+            'event_category': 'Registration',
+            'event_label': 'AI Lab Lead'
+          });
+        }
+        
+        // Redirecionar para a página de agradecimento
+        router.push(`/obrigado?email=${encodeURIComponent(validatedData.email)}`);
+        
+      } catch (error) {
+        console.error('Erro ao enviar dados:', error);
+        // Mesmo com erro no webhook, redirecionar para não perder o lead
+        router.push(`/obrigado?email=${encodeURIComponent(validatedData.email)}`);
+      }
+      
     } catch (error) {
       if (error instanceof z.ZodError) {
         const formattedErrors: Partial<FormData> = {};
@@ -40,7 +98,6 @@ export function LeadForm() {
         });
         setErrors(formattedErrors);
       }
-    } finally {
       setIsSubmitting(false);
     }
   };
