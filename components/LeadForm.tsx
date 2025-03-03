@@ -34,11 +34,6 @@ export function LeadForm() {
           />
         </div>
 
-        <div className="text-xs text-gray-400 mt-2 mb-4">
-          <p>Esses dados serão utilizados para entrarmos em contato com você e disponibilizarmos mais conteúdos e ofertas. Caso você não queira mais receber os nosso emails, cada email que você receber, incluirá ao final, um link que poderá ser usado para remover o seu email da nossa lista de distribuição.</p>
-          <p className="mt-2">Para mais informações, acesse: <a href="https://hotmart.com/pt-br/legal/privacidade-de-dados/" target="_blank" rel="noopener noreferrer" className="text-[#0c83fe] hover:underline">Política de Privacidade</a></p>
-        </div>
-
         {/* Campo oculto para o honeypot anti-spam */}
         <div style={{ position: "absolute", left: "-5000px" }} aria-hidden="true">
           <input type="text" autoComplete='new-password' name="b_7auoBJ9" tabIndex={-1} value="" />
