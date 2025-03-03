@@ -1,6 +1,8 @@
 'use client';
 
-export function LeadForm() {
+import { memo } from 'react';
+
+const LeadForm = memo(function LeadForm() {
   return (
     <div className="hotmart-form-container">
       <form 
@@ -61,4 +63,6 @@ export function LeadForm() {
       `}} />
     </div>
   );
-}
+});
+
+export { LeadForm };
