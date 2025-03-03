@@ -26,7 +26,13 @@ export function LeadForm() {
             var redirectInput = document.querySelector('input[name="redirect_to"]');
             if (redirectInput) {
               var email = document.getElementById('email').value;
-              redirectInput.value = 'https://ai-lab-amber.vercel.app/obrigado?email=' + encodeURIComponent(email);
+              
+              // Usar o domínio atual para o redirecionamento
+              var currentDomain = window.location.origin;
+              var redirectPath = '/obrigado'; // Caminho relativo da página de agradecimento
+              
+              redirectInput.value = currentDomain + redirectPath + '?email=' + encodeURIComponent(email);
+              console.log('Redirecionando para: ' + redirectInput.value);
             }
           });
         }
@@ -95,8 +101,8 @@ export function LeadForm() {
           <input type="text" autoComplete='new-password' name="b_RxuyBWA" tabIndex={-1} value="" />
         </div>
 
-        {/* Campo oculto para o redirecionamento */}
-        <input type="hidden" name="redirect_to" value="https://ai-lab-amber.vercel.app/obrigado" />
+        {/* Campo oculto para o redirecionamento - valor será atualizado via JavaScript */}
+        <input type="hidden" name="redirect_to" value="" />
 
         <button
           klicksend-form-submit-id='RxuyBWA'

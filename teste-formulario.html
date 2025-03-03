@@ -100,7 +100,15 @@
                 form.addEventListener('submit', function(e) {
                     var redirectInput = document.querySelector('input[name="redirect_to"]');
                     if (redirectInput) {
-                        redirectInput.value = 'https://ai-lab-amber.vercel.app/obrigado?email=' + encodeURIComponent(document.getElementById('email').value);
+                        var email = document.getElementById('email').value;
+                        
+                        // Usar o domínio atual para o redirecionamento
+                        // Para teste local, usamos o domínio de produção
+                        var currentDomain = "https://ai-lab-amber.vercel.app";
+                        var redirectPath = '/obrigado';
+                        
+                        redirectInput.value = currentDomain + redirectPath + '?email=' + encodeURIComponent(email);
+                        console.log('Redirecionando para: ' + redirectInput.value);
                     }
                 });
             }
