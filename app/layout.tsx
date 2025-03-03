@@ -9,11 +9,9 @@ export const metadata: Metadata = {
   title: 'AI Lab - Criando Aplicações de IA de Forma Profissional',
   description: 'Aprenda na prática a desenvolver soluções avançadas com LLM, RAG e Agentes usando ferramentas como CrewAI, langGraph, composio e Open Research.',
   icons: {
-    icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/icon.png', type: 'image/png' }
-    ],
-    apple: { url: '/icon.png', type: 'image/png' }
+    icon: '/favicon.ico',
+    apple: '/apple-icon.png',
+    shortcut: '/favicon.ico',
   },
 };
 
