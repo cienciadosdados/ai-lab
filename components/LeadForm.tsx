@@ -1,198 +1,110 @@
 'use client';
 
-import { useState } from 'react';
-import { z } from 'zod';
-import { useRouter } from 'next/navigation';
-
-const formSchema = z.object({
-  email: z.string().email('Email inválido'),
-  whatsapp: z.string().min(11, 'WhatsApp inválido').max(11, 'WhatsApp inválido')
-});
-
-type FormData = z.infer<typeof formSchema>;
+import { useEffect } from 'react';
 
 export function LeadForm() {
-  const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<Partial<FormData>>({});
-  const [formData, setFormData] = useState<FormData>({
-    email: '',
-    whatsapp: ''
-  });
+  // Função para capturar UTM params e adicionar ao formulário
+  useEffect(() => {
+    // Função para adicionar script do Hotmart Send
+    const addHotmartFormScript = () => {
+      const script = document.createElement('script');
+      script.innerHTML = `
+        var pageParams = new URLSearchParams(window.location.search);
+        var form = document.querySelector('form[klicksend-form-id="RxuyBWA"]');
+        if (form) {
+          var formActionUrl = new URL(form.action);
+          var formActionSearchParams = formActionUrl.searchParams.size > 0 ? formActionUrl.searchParams.toString() + '&' : '';
+          var combinedParams = formActionSearchParams + pageParams.toString();
+          form.action = formActionUrl.origin + formActionUrl.pathname + '?' + combinedParams;
+        }
+      `;
+      document.body.appendChild(script);
+    };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setErrors({});
-
-    try {
-      const validatedData = formSchema.parse(formData);
-      
-      // Obter o link do formulário do Hotmart das variáveis de ambiente
-      const formUrl = process.env.NEXT_PUBLIC_HOTMART_FORM_URL;
-      const formTag = process.env.NEXT_PUBLIC_HOTMART_FORM_TAG || 'AI-HackAgents-01-25';
-      
-      // Capturar UTM params do localStorage
-      const utmSource = localStorage.getItem('utm_source') || '';
-      const utmMedium = localStorage.getItem('utm_medium') || '';
-      const utmCampaign = localStorage.getItem('utm_campaign') || '';
-      const utmTerm = localStorage.getItem('utm_term') || '';
-      const utmContent = localStorage.getItem('utm_content') || '';
-      
-      // Método 1: Se temos um link direto para o formulário do Hotmart, podemos redirecionar para ele
-      if (formUrl) {
-        // Construir URL com parâmetros para pré-preencher o formulário do Hotmart
-        const hotmartUrl = new URL(formUrl);
-        hotmartUrl.searchParams.append('email', validatedData.email);
-        hotmartUrl.searchParams.append('phone', validatedData.whatsapp);
-        hotmartUrl.searchParams.append('tag', formTag);
-        
-        if (utmSource) hotmartUrl.searchParams.append('utm_source', utmSource);
-        if (utmMedium) hotmartUrl.searchParams.append('utm_medium', utmMedium);
-        if (utmCampaign) hotmartUrl.searchParams.append('utm_campaign', utmCampaign);
-        if (utmTerm) hotmartUrl.searchParams.append('utm_term', utmTerm);
-        if (utmContent) hotmartUrl.searchParams.append('utm_content', utmContent);
-        
-        // Redirecionar para o formulário do Hotmart
-        window.location.href = hotmartUrl.toString();
-        return;
-      }
-      
-      // Método 2: Se não temos um link direto, vamos para a página de agradecimento
-      // Registrar evento de conversão no Facebook Pixel
-      if (typeof window !== 'undefined' && (window as any).fbq) {
-        (window as any).fbq('track', 'Lead', {
-          content_name: 'AI Lab Registration',
-          content_category: 'Registration'
-        });
-      }
-      
-      // Registrar evento de conversão no Google Analytics
-      if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', 'conversion', {
-          'send_to': 'AW-XXXXXXXXXX/XXXXXXXXXXXXXXXXXXXXXXXXX',
-          'event_category': 'Registration',
-          'event_label': 'AI Lab Lead'
-        });
-      }
-      
-      // Redirecionar para a página de agradecimento
-      router.push(`/obrigado?email=${encodeURIComponent(validatedData.email)}`);
-      
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const formattedErrors: Partial<FormData> = {};
-        error.errors.forEach(err => {
-          if (err.path) {
-            formattedErrors[err.path[0] as keyof FormData] = err.message;
-          }
-        });
-        setErrors(formattedErrors);
-      }
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    
-    // Formatação específica para WhatsApp
-    if (name === 'whatsapp') {
-      const numbers = value.replace(/\D/g, '');
-      setFormData(prev => ({ ...prev, [name]: numbers }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
-  };
+    // Adicionar o script após o componente ser montado
+    setTimeout(addHotmartFormScript, 500);
+  }, []);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <input
-          type="email"
-          name="email"
-          placeholder="Digite seu melhor e-mail"
-          value={formData.email}
-          onChange={handleChange}
-          className={`
-            w-full px-4 py-3 rounded-lg
-            bg-black/40 border border-white/10
-            text-white placeholder-gray-400
-            focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50
-            transition-all duration-200
-            ${errors.email ? 'border-red-500' : ''}
-          `}
-          disabled={isSubmitting}
-        />
-        {errors.email && (
-          <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-        )}
-      </div>
-
-      <div>
-        <input
-          type="tel"
-          name="whatsapp"
-          placeholder="Digite seu WhatsApp (somente números)"
-          value={formData.whatsapp}
-          onChange={handleChange}
-          maxLength={11}
-          className={`
-            w-full px-4 py-3 rounded-lg
-            bg-black/40 border border-white/10
-            text-white placeholder-gray-400
-            focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50
-            transition-all duration-200
-            ${errors.whatsapp ? 'border-red-500' : ''}
-          `}
-          disabled={isSubmitting}
-        />
-        {errors.whatsapp && (
-          <p className="text-red-500 text-sm mt-1">{errors.whatsapp}</p>
-        )}
-      </div>
-
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className={`
-          w-full px-8 py-4 rounded-xl
-          bg-[#0c83fe] hover:bg-[#0c83fe]/90
-          text-white font-medium
-          disabled:opacity-50 disabled:cursor-not-allowed
-          transition-all duration-200
-          relative overflow-hidden
-          ${isSubmitting ? 'cursor-wait' : ''}
-        `}
+    <div className="hotmart-form-container">
+      <form 
+        klicksend-form-id='RxuyBWA' 
+        autoComplete='off' 
+        method="post" 
+        action="//handler.send.hotmart.com/subscription/RxuyBWA"
+        className="space-y-4"
       >
-        <span className="relative z-10 flex items-center justify-center gap-2">
-          {isSubmitting ? (
-            <>
-              <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                  fill="none"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                />
-              </svg>
-              Enviando...
-            </>
-          ) : (
-            <>
-              Quero me inscrever
-            </>
-          )}
-        </span>
-      </button>
-    </form>
+        <div>
+          <input
+            type="email"
+            autoComplete="off"
+            name="email"
+            id="email"
+            placeholder="Digite seu melhor e-mail"
+            required
+            className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 transition-all duration-200"
+          />
+        </div>
+
+        <div>
+          <input
+            type="text"
+            autoComplete="off"
+            name="first_name"
+            id="first_name"
+            placeholder="Digite seu nome"
+            className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 transition-all duration-200"
+          />
+        </div>
+
+        <div>
+          <input
+            type="text"
+            autoComplete="off"
+            name="phone"
+            id="phone"
+            placeholder="Digite seu WhatsApp (somente números)"
+            className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0c83fe]/50 transition-all duration-200"
+          />
+        </div>
+
+        <div className="text-xs text-gray-400 mt-2 mb-4">
+          <p>Esses dados serão utilizados para entrarmos em contato com você e disponibilizarmos mais conteúdos e ofertas. Caso você não queira mais receber os nosso emails, cada email que você receber, incluirá ao final, um link que poderá ser usado para remover o seu email da nossa lista de distribuição.</p>
+          <p className="mt-2">Para mais informações, acesse: <a href="https://hotmart.com/pt-br/legal/privacidade-de-dados/" target="_blank" rel="noopener noreferrer" className="text-[#0c83fe] hover:underline">Política de Privacidade</a></p>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            autoComplete="off"
+            name="gdpr"
+            id="gdpr"
+            value="Concordo em receber os e-mails"
+            required
+            className="w-4 h-4 accent-[#0c83fe]"
+          />
+          <label htmlFor="gdpr" className="text-white text-sm">
+            Concordo em receber os e-mails
+          </label>
+        </div>
+
+        {/* Campo oculto para o honeypot anti-spam */}
+        <div style={{ position: "absolute", left: "-5000px" }} aria-hidden="true">
+          <input type="text" autoComplete='new-password' name="b_RxuyBWA" tabIndex={-1} value="" />
+        </div>
+
+        {/* Campo oculto para o redirecionamento */}
+        <input type="hidden" name="redirect_to" value="https://ai-lab-amber.vercel.app/obrigado?email={{email}}" />
+
+        <button
+          klicksend-form-submit-id='RxuyBWA'
+          className="w-full px-8 py-4 rounded-xl bg-[#0c83fe] hover:bg-[#0c83fe]/90 text-white font-medium transition-all duration-200 relative overflow-hidden"
+        >
+          <span className="relative z-10 flex items-center justify-center gap-2">
+            Quero me inscrever
+          </span>
+        </button>
+      </form>
+    </div>
   );
 }
