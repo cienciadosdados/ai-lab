@@ -9,20 +9,24 @@ export function LeadForm() {
     const addHotmartFormScript = () => {
       const script = document.createElement('script');
       script.innerHTML = `
+        // Capturar parâmetros UTM
         var pageParams = new URLSearchParams(window.location.search);
         var form = document.querySelector('form[klicksend-form-id="RxuyBWA"]');
+        
         if (form) {
+          // Adicionar parâmetros UTM à URL de ação do formulário
           var formActionUrl = new URL(form.action);
           var formActionSearchParams = formActionUrl.searchParams.size > 0 ? formActionUrl.searchParams.toString() + '&' : '';
           var combinedParams = formActionSearchParams + pageParams.toString();
           form.action = formActionUrl.origin + formActionUrl.pathname + '?' + combinedParams;
           
-          // Garantir que o redirecionamento funcione corretamente
+          // Modificar a ação do formulário para usar o método GET para o redirecionamento
           form.addEventListener('submit', function(e) {
-            // Adicionar um campo hidden para o redirecionamento no momento do submit
+            // Atualizar o valor do campo de redirecionamento com o email inserido
             var redirectInput = document.querySelector('input[name="redirect_to"]');
             if (redirectInput) {
-              redirectInput.value = 'https://ai-lab-amber.vercel.app/obrigado?email=' + encodeURIComponent(document.getElementById('email').value);
+              var email = document.getElementById('email').value;
+              redirectInput.value = 'https://ai-lab-amber.vercel.app/obrigado?email=' + encodeURIComponent(email);
             }
           });
         }
