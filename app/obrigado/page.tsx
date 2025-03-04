@@ -80,7 +80,7 @@ function ThankYouContent() {
               {
                 title: "Entre no Grupo do WhatsApp",
                 description: "Para garantir que você receberá todos os scripts dos projetos, é importante que esteja no grupo EXCLUSIVO, pois será nosso REPO oficial.",
-                link: "https://chat.whatsapp.com/seu-link-do-grupo",
+                link: "https://chat.whatsapp.com/Fx7HY7BpPLt43Jsmv7caBy",
                 buttonText: "PARTICIPAR DO GRUPO EXCLUSIVO"
               },
               {
