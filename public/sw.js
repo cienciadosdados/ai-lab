@@ -1,6 +1,10 @@
 // Service Worker para cache e melhoria de performance
-const CACHE_NAME = 'ai-lab-cache-v1';
-const urlsToCache = [
+const CACHE_NAME = 'ai-lab-cache-v2';
+const STATIC_CACHE_NAME = 'ai-lab-static-v2';
+const DYNAMIC_CACHE_NAME = 'ai-lab-dynamic-v2';
+
+// Recursos estáticos críticos para pré-cache
+const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/obrigado/',
@@ -9,67 +13,129 @@ const urlsToCache = [
   '/manifest.json',
   '/images/hero-bg.webp',
   '/images/logo.png',
+  '/register-sw.js',
+  '/image-optimizer.js'
 ];
 
+// Recursos que devem ser cacheados com estratégia de cache-first
+const CACHE_FIRST_PATTERNS = [
+  /\.(jpg|jpeg|png|gif|webp|svg|ico)$/,
+  /\.(css|js)$/,
+  /^\/fonts\//,
+  /^\/images\//,
+  /^\/static\//,
+  /^\/_next\/static\//,
+  /^\/_next\/image\//
+];
+
+// Função para verificar se uma URL deve usar cache-first
+function shouldUseCacheFirst(url) {
+  return CACHE_FIRST_PATTERNS.some(pattern => pattern.test(url));
+}
+
+// Instalar o service worker e pré-cachear recursos estáticos
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
+    caches.open(STATIC_CACHE_NAME)
       .then(cache => {
-        return cache.addAll(urlsToCache);
+        console.log('Caching static assets');
+        return cache.addAll(STATIC_ASSETS);
       })
-  );
-});
-
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - retorna a resposta do cache
-        if (response) {
-          return response;
-        }
-
-        // Clonar a requisição
-        const fetchRequest = event.request.clone();
-
-        return fetch(fetchRequest).then(
-          response => {
-            // Verificar se recebemos uma resposta válida
-            if(!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-
-            // Clonar a resposta
-            const responseToCache = response.clone();
-
-            // Não fazer cache de API ou requisições dinâmicas
-            if (!event.request.url.includes('/api/')) {
-              caches.open(CACHE_NAME)
-                .then(cache => {
-                  cache.put(event.request, responseToCache);
-                });
-            }
-
-            return response;
-          }
-        );
-      })
+      .then(() => self.skipWaiting()) // Força a ativação imediata
   );
 });
 
 // Limpar caches antigos quando uma nova versão do service worker é ativada
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
-
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
+        cacheNames
+          .filter(cacheName => 
+            cacheName.startsWith('ai-lab-') && 
+            cacheName !== STATIC_CACHE_NAME && 
+            cacheName !== DYNAMIC_CACHE_NAME
+          )
+          .map(cacheName => {
+            console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
-          }
-        })
+          })
       );
     })
+    .then(() => self.clients.claim()) // Controla todas as páginas imediatamente
   );
+});
+
+// Estratégia de cache para requisições
+self.addEventListener('fetch', event => {
+  // Ignorar requisições não GET ou para APIs
+  if (event.request.method !== 'GET' || event.request.url.includes('/api/')) {
+    return;
+  }
+
+  const url = new URL(event.request.url);
+  
+  // Estratégia cache-first para recursos estáticos
+  if (shouldUseCacheFirst(url.pathname)) {
+    event.respondWith(
+      caches.match(event.request)
+        .then(response => {
+          // Cache hit - retorna a resposta do cache
+          if (response) {
+            return response;
+          }
+
+          // Cache miss - busca da rede e armazena no cache
+          return fetch(event.request).then(networkResponse => {
+            if (!networkResponse || networkResponse.status !== 200) {
+              return networkResponse;
+            }
+
+            // Clonar a resposta antes de armazenar no cache
+            const responseToCache = networkResponse.clone();
+            caches.open(STATIC_CACHE_NAME).then(cache => {
+              cache.put(event.request, responseToCache);
+            });
+
+            return networkResponse;
+          });
+        })
+    );
+  } 
+  // Estratégia network-first para outros recursos
+  else {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          // Clonar a resposta antes de armazenar no cache
+          const responseToCache = response.clone();
+          
+          caches.open(DYNAMIC_CACHE_NAME).then(cache => {
+            cache.put(event.request, responseToCache);
+          });
+          
+          return response;
+        })
+        .catch(() => {
+          // Se a rede falhar, tenta buscar do cache
+          return caches.match(event.request);
+        })
+    );
+  }
+});
+
+// Pré-cachear páginas principais quando o usuário está online
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'CACHE_PAGES') {
+    const pagesToCache = event.data.payload.urls || [];
+    
+    caches.open(STATIC_CACHE_NAME).then(cache => {
+      cache.addAll(pagesToCache).then(() => {
+        console.log('Pages pre-cached successfully');
+        if (event.ports && event.ports[0]) {
+          event.ports[0].postMessage({ success: true });
+        }
+      });
+    });
+  }
 });

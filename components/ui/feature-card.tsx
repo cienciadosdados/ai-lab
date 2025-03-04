@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 interface FeatureCardProps {
   title: string;
@@ -12,16 +12,35 @@ interface FeatureCardProps {
 }
 
 export function FeatureCard({ title, description, icon, delay = 0, className = "" }: FeatureCardProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if device is mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: delay * 0.1 }}
-      whileHover={{ scale: 1.02 }}
+      transition={{ 
+        duration: 0.5, 
+        delay: isMobile ? 0 : delay * 0.1 // No delay on mobile for faster rendering
+      }}
+      whileHover={isMobile ? {} : { scale: 1.02 }} // Disable hover animation on mobile
       className={`relative group ${className}`}
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-0 group-hover:opacity-100" />
+      {/* Simplified blur effect for mobile */}
+      <div className={`absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-xl ${
+        isMobile ? 'blur-md' : 'blur-xl group-hover:blur-2xl'
+      } transition-all duration-300 opacity-0 group-hover:opacity-100`} />
       
       <div className="relative p-6 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10 group-hover:border-[#0c83fe]/50 transition-colors duration-300">
         {icon && (

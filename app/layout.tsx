@@ -12,8 +12,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'AI Lab - Criando Aplicações de IA de Forma Profissional',
-  description: 'Aprenda na prática a desenvolver soluções avançadas com LLM, RAG e Agentes usando ferramentas como CrewAI, langGraph, composio e Open Research.',
+  title: 'AI Lab - Criando Aplicações de IA',
+  description: 'Aprenda a desenvolver soluções avançadas com LLM, RAG e Agentes usando ferramentas como CrewAI, langGraph, composio e Open Research.',
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' }
@@ -24,8 +24,8 @@ export const metadata: Metadata = {
     follow: true,
   },
   openGraph: {
-    title: 'AI Lab - Criando Aplicações de IA de Forma Profissional',
-    description: 'Aprenda na prática a desenvolver soluções avançadas com LLM, RAG e Agentes usando ferramentas como CrewAI, langGraph, composio e Open Research.',
+    title: 'AI Lab - Criando Aplicações de IA',
+    description: 'Aprenda a desenvolver soluções avançadas com LLM, RAG e Agentes usando ferramentas como CrewAI, langGraph, composio e Open Research.',
     url: 'https://ai-labs.cienciadosdados.com/',
     siteName: 'AI Lab',
     locale: 'pt_BR',
@@ -52,6 +52,7 @@ export default function RootLayout({
         <link
           rel="preconnect" 
           href="https://fonts.googleapis.com"
+          crossOrigin=""
         />
         <link 
           rel="preconnect" 
@@ -78,8 +79,8 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         
-        {/* Detecção de conexão lenta */}
-        <Script id="connection-detection" strategy="beforeInteractive">
+        {/* Detecção de conexão lenta - Movido para afterInteractive para não bloquear renderização */}
+        <Script id="connection-detection" strategy="afterInteractive">
           {`
             // Detectar conexão lenta e adicionar classe para otimizações
             if ('connection' in navigator) {
@@ -99,46 +100,45 @@ export default function RootLayout({
           src="/register-sw.js"
           strategy="lazyOnload"
         />
-      </head>
-      <body className={inter.className}>
-        {/* Conteúdo principal primeiro, scripts depois */}
-        {children}
         
-        {/* Script de otimização de imagens */}
-        <Script 
-          id="image-optimizer" 
-          src="/image-optimizer.js"
-          strategy="afterInteractive"
+        {/* Scripts de otimização para dispositivos móveis */}
+        <script 
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Detectar conexão lenta
+              (function() {
+                function detectSlowConnection() {
+                  if ('connection' in navigator) {
+                    const conn = navigator.connection;
+                    if (conn.saveData || 
+                        conn.effectiveType === 'slow-2g' || 
+                        conn.effectiveType === '2g' || 
+                        conn.effectiveType === '3g') {
+                      document.documentElement.classList.add('slow-connection');
+                      return true;
+                    }
+                  }
+                  return false;
+                }
+                
+                const isSlowConnection = detectSlowConnection();
+                
+                // Desativar animações em conexões lentas
+                if (isSlowConnection) {
+                  document.documentElement.classList.add('reduce-motion');
+                }
+                
+                // Detectar dispositivo móvel
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+                if (isMobile) {
+                  document.documentElement.classList.add('mobile-device');
+                }
+              })();
+            `
+          }}
         />
         
-        {/* Google Tag Manager - Movido para depois do conteúdo principal */}
-        <Script id="google-tag-manager" strategy="lazyOnload">
-          {`
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-5DXNNZXX');
-          `}
-        </Script>
-        
-        {/* Facebook Pixel Code */}
-        <Script id="facebook-pixel" strategy="lazyOnload">
-          {`
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', 'XXXXXXXXXXXXXXXXX');
-            fbq('track', 'PageView');
-          `}
-        </Script>
-        
-        {/* UTM Tracking Script - Otimizado para carregar depois do conteúdo principal */}
+        {/* Script de rastreamento UTM simplificado */}
         <Script id="utm-tracking" strategy="lazyOnload">
           {`
             function getParameterByName(name) {
@@ -169,22 +169,47 @@ export default function RootLayout({
             }
 
             // Save UTM parameters when page loads
-            document.addEventListener('DOMContentLoaded', function() {
-              var utmParams = saveUtmParams();
-              
-              // Add UTM params to all forms
-              document.querySelectorAll('form').forEach(function(form) {
-                for (var param in utmParams) {
-                  if (utmParams.hasOwnProperty(param)) {
-                    var input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = param;
-                    input.value = utmParams[param];
-                    form.appendChild(input);
-                  }
+            var utmParams = saveUtmParams();
+            
+            // Add UTM params to all forms
+            document.querySelectorAll('form').forEach(function(form) {
+              for (var param in utmParams) {
+                if (utmParams.hasOwnProperty(param)) {
+                  var input = document.createElement('input');
+                  input.type = 'hidden';
+                  input.name = param;
+                  input.value = utmParams[param];
+                  form.appendChild(input);
                 }
-              });
+              }
             });
+          `}
+        </Script>
+        
+        {/* Google Tag Manager - Movido para depois do conteúdo principal */}
+        <Script id="google-tag-manager" strategy="lazyOnload">
+          {`
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-5DXNNZXX');
+          `}
+        </Script>
+        
+        {/* Facebook Pixel Code */}
+        <Script id="facebook-pixel" strategy="lazyOnload">
+          {`
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', 'XXXXXXXXXXXXXXXXX');
+            fbq('track', 'PageView');
           `}
         </Script>
         
@@ -207,6 +232,16 @@ export default function RootLayout({
             src="https://www.facebook.com/tr?id=XXXXXXXXXXXXXXXXX&ev=PageView&noscript=1"
           />
         </noscript>
+      </head>
+      <body className={inter.className}>
+        {/* Conteúdo principal primeiro, scripts depois */}
+        {children}
+        
+        {/* Scripts de otimização */}
+        <script src="/register-sw.js" async defer />
+        <script src="/image-optimizer.js" async defer />
+        <script src="/font-optimizer.js" async defer />
+        <script src="/css-optimizer.js" async defer />
       </body>
     </html>
   )

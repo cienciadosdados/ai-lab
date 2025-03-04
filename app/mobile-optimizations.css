@@ -99,7 +99,9 @@ img.loaded {
   }
 }
 
-.save-data * {
+.save-data *, 
+.reduce-motion *, 
+.slow-connection * {
   animation: none !important;
   transition: none !important;
 }
@@ -158,11 +160,13 @@ img.loaded {
 }
 
 /* Classe para imagens de baixa qualidade em conexões lentas */
-.save-data .high-quality-img {
+.save-data .high-quality-img,
+.slow-connection .high-quality-img {
   display: none !important;
 }
 
-.save-data .low-quality-img {
+.save-data .low-quality-img,
+.slow-connection .low-quality-img {
   display: block !important;
 }
 
@@ -199,36 +203,94 @@ img.loaded {
 }
 
 /* Melhorar a renderização de texto */
-body {
+.mobile-device {
   text-rendering: optimizeSpeed;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Otimização de imagens para telas de alta densidade */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .optimized-image {
-    image-rendering: -webkit-optimize-contrast;
+/* Otimizações para dispositivos móveis */
+.mobile-device .desktop-only {
+  display: none !important;
+}
+
+.mobile-device .mobile-only {
+  display: block !important;
+}
+
+/* Otimizações para conexões lentas */
+.slow-connection .heavy-element,
+.save-data .heavy-element {
+  display: none !important;
+}
+
+.slow-connection .light-element,
+.save-data .light-element {
+  display: block !important;
+}
+
+.light-element {
+  display: none;
+}
+
+/* Otimizações de layout para dispositivos móveis */
+@media (max-width: 768px) {
+  /* Usar content-visibility para melhorar o desempenho de rolagem */
+  .content-block {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
+  }
+  
+  /* Reduzir complexidade de layout */
+  .complex-layout {
+    display: block !important;
+  }
+  
+  /* Simplificar grids */
+  .grid {
+    grid-template-columns: 1fr !important;
   }
 }
 
-/* Evitar textos muito pequenos */
-* {
-  -webkit-text-size-adjust: 100%;
+/* Otimizações para vídeos */
+.mobile-device video,
+.slow-connection video {
+  max-height: 300px;
 }
 
-/* Melhorar a performance de scroll */
-body {
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
+/* Otimizações para fontes em conexões lentas */
+.slow-connection {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
 }
 
-/* Melhorar a performance de animações */
-* {
-  will-change: auto;
+/* Otimizações para gradientes em dispositivos móveis */
+.mobile-device .bg-gradient-to-r,
+.mobile-device .bg-gradient-to-l,
+.mobile-device .bg-gradient-to-t,
+.mobile-device .bg-gradient-to-b,
+.slow-connection .bg-gradient-to-r,
+.slow-connection .bg-gradient-to-l,
+.slow-connection .bg-gradient-to-t,
+.slow-connection .bg-gradient-to-b {
+  background: #111 !important;
 }
 
-/* Otimizar o carregamento de fontes */
-@font-face {
-  font-display: swap;
+/* Otimizações para sombras em dispositivos móveis */
+.mobile-device .shadow-lg,
+.mobile-device .shadow-xl,
+.mobile-device .shadow-2xl,
+.slow-connection .shadow-lg,
+.slow-connection .shadow-xl,
+.slow-connection .shadow-2xl {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
+}
+
+/* Otimizações para efeitos de blur em dispositivos móveis */
+.mobile-device .blur-lg,
+.mobile-device .blur-xl,
+.mobile-device .blur-2xl,
+.slow-connection .blur-lg,
+.slow-connection .blur-xl,
+.slow-connection .blur-2xl {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background-color: rgba(0,0,0,0.7) !important;
 }

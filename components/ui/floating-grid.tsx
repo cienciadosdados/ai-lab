@@ -5,12 +5,24 @@ import { useState, useEffect } from 'react';
 
 export function FloatingGrid() {
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    // Check if device is mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   if (!mounted) return null;
+
+  // Reduce number of floating elements on mobile
+  const particleCount = isMobile ? 5 : 20;
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -23,8 +35,9 @@ export function FloatingGrid() {
       >
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%] hero-gradient opacity-30" />
       </motion.div>
-      {/* Floating Elements */}
-      {Array.from({ length: 20 }).map((_, i) => (
+      
+      {/* Floating Elements - reduced complexity for mobile */}
+      {Array.from({ length: particleCount }).map((_, i) => (
         <motion.div
           key={i}
           className="absolute w-2 h-2 bg-blue-500/20 rounded-full"
@@ -43,12 +56,12 @@ export function FloatingGrid() {
             ],
           }}
           transition={{
-            duration: Math.random() * 10 + 20,
+            duration: isMobile ? Math.random() * 15 + 30 : Math.random() * 10 + 20, // Slower on mobile
             repeat: Infinity,
             ease: "linear",
           }}
           style={{
-            filter: "blur(8px)",
+            filter: isMobile ? "blur(4px)" : "blur(8px)", // Less blur on mobile
           }}
         />
       ))}
