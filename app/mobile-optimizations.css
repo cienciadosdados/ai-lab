@@ -261,6 +261,97 @@ img.loaded {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
 }
 
+/* Aumentar tamanho da fonte em dispositivos móveis */
+@media (max-width: 768px) {
+  body {
+    font-size: 18px;
+  }
+  
+  h1 {
+    font-size: 2.5rem !important;
+  }
+  
+  h2 {
+    font-size: 2.2rem !important;
+  }
+  
+  h3 {
+    font-size: 1.8rem !important;
+  }
+  
+  p, li, a, button, input, textarea {
+    font-size: 1.1rem !important;
+  }
+  
+  .text-4xl {
+    font-size: 2.5rem !important;
+  }
+  
+  .text-3xl {
+    font-size: 2rem !important;
+  }
+  
+  .text-2xl {
+    font-size: 1.75rem !important;
+  }
+  
+  .text-xl {
+    font-size: 1.5rem !important;
+  }
+  
+  .text-lg {
+    font-size: 1.25rem !important;
+  }
+  
+  .text-base {
+    font-size: 1.1rem !important;
+  }
+  
+  .text-sm {
+    font-size: 1rem !important;
+  }
+  
+  /* Melhorar espaçamento e tamanho dos botões */
+  button, .button, [type="button"], [type="submit"] {
+    padding: 0.75rem 1.5rem !important;
+    min-height: 3rem !important;
+    touch-action: manipulation;
+  }
+  
+  /* Aumentar área de toque para links e botões */
+  a, button, .button, [type="button"], [type="submit"], input[type="checkbox"], input[type="radio"] {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+  
+  /* Melhorar espaçamento entre elementos */
+  .space-y-4 {
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+  
+  /* Aumentar padding em containers */
+  .container, .px-4, .px-6 {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+  
+  /* Melhorar legibilidade do texto */
+  p, li {
+    line-height: 1.7 !important;
+    letter-spacing: 0.01em !important;
+  }
+  
+  /* Otimização específica para o título principal */
+  .mobile-optimized-text {
+    font-size: 2.5rem !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.02em !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+    margin-bottom: 1rem !important;
+  }
+}
+
 /* Forçar atualização de texto */
 h2:contains("Criando Aplicações de IA de Forma Profissional"),
 h2:contains("IA de Forma Profissional"),
