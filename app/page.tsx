@@ -52,8 +52,8 @@ export default function Page() {
                 <span className="text-[#0c83fe]">RAG</span> e{" "}
                 <span className="text-[#0c83fe]">Agentes</span> usando ferramentas como{" "}
                 <span className="text-[#0c83fe]">CrewAI</span>,{" "}
-                <span className="text-[#0c83fe]">langGraph</span>,{" "}
-                <span className="text-[#0c83fe]">composio</span> e{" "}
+                <span className="text-[#0c83fe]">LangGraph</span>,{" "}
+                <span className="text-[#0c83fe]">Composio</span> e{" "}
                 <span className="text-[#0c83fe]">Open Research</span>.
               </motion.p>
 
