@@ -261,6 +261,26 @@ img.loaded {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
 }
 
+/* Forçar atualização de texto */
+h2:contains("Criando Aplicações de IA de Forma Profissional"),
+h2:contains("IA de Forma Profissional"),
+*:contains("Criando Aplicações de IA de Forma Profissional") {
+  visibility: hidden;
+  position: relative;
+}
+
+h2:contains("Criando Aplicações de IA de Forma Profissional")::after,
+h2:contains("IA de Forma Profissional")::after,
+*:contains("Criando Aplicações de IA de Forma Profissional")::after {
+  content: "Aplicações de IA Avançadas";
+  visibility: visible;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  text-align: center;
+}
+
 /* Otimizações para gradientes em dispositivos móveis */
 .mobile-device .bg-gradient-to-r,
 .mobile-device .bg-gradient-to-l,

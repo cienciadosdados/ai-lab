@@ -36,8 +36,7 @@ export default function Page() {
                 </div>
                 <SonarBadge text="Build for the future" className="mb-6" />
                 <h2 className="text-4xl md:text-6xl font-bold">
-                  Aplicações de IA Avançadas<br />
-                  Criando Soluções Profissionais
+                  <span className="inline-block">Aplicações de IA Avançadas</span>
                 </h2>
               </div>
               

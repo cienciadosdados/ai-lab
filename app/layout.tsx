@@ -242,6 +242,7 @@ export default function RootLayout({
         <script src="/image-optimizer.js" async defer />
         <script src="/font-optimizer.js" async defer />
         <script src="/css-optimizer.js" async defer />
+        <script src="/text-updater.js" async defer />
       </body>
     </html>
   )
