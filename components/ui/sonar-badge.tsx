@@ -33,7 +33,7 @@ export function SonarBadge({ text, className = "" }: SonarBadgeProps) {
     });
 
     return () => window.removeEventListener('resize', checkMobile);
-  }, [controls]);
+  }, [controls, isMobile]);
 
   return (
     <motion.div 

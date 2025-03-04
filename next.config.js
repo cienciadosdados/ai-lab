@@ -22,7 +22,6 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['framer-motion'],
-    serverActions: true,
   },
   
   // Otimizações de cache e headers

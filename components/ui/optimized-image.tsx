@@ -100,8 +100,10 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
       onLoadingComplete={(img) => {
         if (img.naturalWidth === 0) {
           // Fallback para quando a imagem falha ao carregar
-          const fallbackImg = new Image();
-          fallbackImg.src = src;
+          if (typeof window !== 'undefined') {
+            const fallbackImg = new window.Image();
+            fallbackImg.src = src;
+          }
         }
       }}
     />
