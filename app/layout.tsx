@@ -14,7 +14,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: 'AI Lab - Aplicações de IA Avançadas',
-  description: 'Aprenda a desenvolver soluções avançadas com LLM, RAG e Agentes usando ferramentas como CrewAI, langGraph, composio e Open Research.',
+  description: 'Aprenda a desenvolver soluções avançadas com LLM, RAG e Agentes usando ferramentas como CrewAI, LangGraph, Composio e Open Research.',
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' }
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'AI Lab - Aplicações de IA Avançadas',
-    description: 'Aprenda a desenvolver soluções avançadas com LLM, RAG e Agentes usando ferramentas como CrewAI, langGraph, composio e Open Research.',
+    description: 'Aprenda a desenvolver soluções avançadas com LLM, RAG e Agentes usando ferramentas como CrewAI, LangGraph, Composio e Open Research.',
     url: 'https://ai-labs.cienciadosdados.com/',
     siteName: 'AI Lab',
     locale: 'pt_BR',
@@ -53,12 +53,12 @@ export default function RootLayout({
         <link
           rel="preconnect" 
           href="https://fonts.googleapis.com"
-          crossOrigin=""
+          crossOrigin="anonymous"
         />
         <link 
           rel="preconnect" 
           href="https://fonts.gstatic.com" 
-          crossOrigin=""
+          crossOrigin="anonymous"
         />
         
         {/* DNS Prefetch para domínios externos */}
@@ -287,12 +287,12 @@ export default function RootLayout({
         </Script>
         
         {/* Scripts de otimização */}
-        <script src="/register-sw.js" async defer />
-        <script src="/image-optimizer.js" async defer />
-        <script src="/font-optimizer.js" async defer />
-        <script src="/css-optimizer.js" async defer />
-        <script src="/text-updater.js" async defer />
-        <script src="/cache-buster.js" async defer />
+        <Script src="/register-sw.js" strategy="lazyOnload" />
+        <Script src="/image-optimizer.js" strategy="lazyOnload" />
+        <Script src="/font-optimizer.js" strategy="lazyOnload" />
+        <Script src="/css-optimizer.js" strategy="lazyOnload" />
+        <Script src="/text-updater.js" strategy="lazyOnload" />
+        <Script src="/cache-buster.js" strategy="lazyOnload" />
       </body>
     </html>
   )
