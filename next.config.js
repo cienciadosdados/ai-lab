@@ -4,6 +4,10 @@ const nextConfig = {
   swcMinify: true,
   // Desativar cache estático para forçar nova renderização
   staticPageGenerationTimeout: 1000,
+  // Forçar reconstrução completa
+  generateBuildId: async () => {
+    return `build-${new Date().toISOString().replace(/[^0-9]/g, '')}`
+  },
   // Configurações para otimização de imagens
   images: {
     domains: ['ai-labs.cienciadosdados.com'],
@@ -18,11 +22,15 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=60, s-maxage=60, stale-while-revalidate=300',
+            value: 'public, max-age=0, must-revalidate',
           },
           {
             key: 'Pragma',
             value: 'no-cache',
+          },
+          {
+            key: 'Expires',
+            value: '0',
           },
         ],
       },
@@ -51,7 +59,11 @@ const nextConfig = {
     optimizeImages: true,
     optimizeCss: true,
   },
-  // Versão para forçar recompilação: 20250304-1
+  // Versão para forçar recompilação: 20250304-2
+  env: {
+    BUILD_ID: `${Date.now()}`,
+    NEXT_PUBLIC_BUILD_TIME: new Date().toISOString(),
+  },
 }
 
 module.exports = nextConfig
