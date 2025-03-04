@@ -50,11 +50,11 @@ export default function Page() {
                 Aprenda na prática a desenvolver soluções avançadas com{" "}
                 <span className="text-[#0c83fe]">LLM</span>,{" "}
                 <span className="text-[#0c83fe]">RAG</span> e{" "}
-                <span className="text-[#0c83fe]">Agentes</span> usando ferramentas como{" "}
+                <span className="text-[#0c83fe]">Agentes de IA</span> usando ferramentas como{" "}
                 <span className="text-[#0c83fe]">CrewAI</span>,{" "}
                 <span className="text-[#0c83fe]">LangGraph</span>,{" "}
                 <span className="text-[#0c83fe]">Composio</span> e{" "}
-                <span className="text-[#0c83fe]">Open Research</span>.
+                <span className="text-[#0c83fe]">Deep Research</span>.
               </motion.p>
 
               <motion.div
@@ -100,8 +100,8 @@ export default function Page() {
               },
               {
                 dia: "Dia 2",
-                titulo: "Criando Agentes com IA",
-                descricao: "Desenvolva agentes autônomos usando CrewAI e langgraph, integrando ferramentas e APIs."
+                titulo: "LLM e RAG Avançado",
+                descricao: "Aplicação avançada com LLM de ponta, embeddings e vector DBs"
               },
               {
                 dia: "Dia 3",
@@ -148,7 +148,7 @@ export default function Page() {
               {
                 titulo: "LLMs e RAG",
                 items: [
-                  "Fundamentos de Transformers e GPT",
+                  "Claude, Openai, DeepSeek e muito mais",
                   "Implementação de RAG",
                   "Vector Databases",
                   "Fine-tuning e Otimização"
@@ -166,7 +166,7 @@ export default function Page() {
               {
                 titulo: "Projetos Práticos",
                 items: [
-                  "Q&A com Documentos",
+                  "RAG e Deep Search avançado",
                   "Agentes de Busca",
                   "Automação com IA",
                   "Deploy em Produção"
