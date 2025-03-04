@@ -135,7 +135,7 @@ function ThankYouContent() {
           className="text-center"
         >
           <p className="text-gray-400 mb-4">
-            Tem alguma dúvida? Entre em contato pelo e-mail <a href="mailto:contato@cienciadosdados.com" className="text-[#0c83fe] hover:underline">contato@cienciadosdados.com</a>
+            Tem alguma dúvida? Entre em contato pelo e-mail <a href="mailto:suporte@cienciadosdados.com" className="text-[#0c83fe] hover:underline">suporte@cienciadosdados.com</a>
           </p>
           
           <div className="flex justify-center space-x-4 mt-8">
