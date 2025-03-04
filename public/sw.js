@@ -1,7 +1,7 @@
 // Service Worker para cache e melhoria de performance
-const CACHE_NAME = 'ai-lab-cache-v3';
-const STATIC_CACHE_NAME = 'ai-lab-static-v3';
-const DYNAMIC_CACHE_NAME = 'ai-lab-dynamic-v3';
+const CACHE_NAME = 'ai-lab-cache-v4';
+const STATIC_CACHE_NAME = 'ai-lab-static-v4';
+const DYNAMIC_CACHE_NAME = 'ai-lab-dynamic-v4';
 
 // Recursos estáticos críticos para pré-cache
 const STATIC_ASSETS = [
