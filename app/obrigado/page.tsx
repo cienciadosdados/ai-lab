@@ -55,11 +55,11 @@ function ThankYouContent() {
             <SonarBadge text="IMPORTANTE" className="mb-2" />
           </div>
           
-          <div className="relative inline-block mb-8">
+          <div className="relative inline-block mb-8 w-full max-w-md mx-auto">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#0c83fe]/30 via-[#0c83fe]/10 to-[#0c83fe]/30 rounded-lg blur-md"></div>
-            <h3 className="relative text-2xl md:text-3xl font-bold py-2 px-4 bg-black/60 backdrop-blur-sm rounded-lg border border-[#0c83fe]/40">
+            <h3 className="relative text-xl md:text-3xl font-bold py-2 px-4 bg-black/60 backdrop-blur-sm rounded-lg border border-[#0c83fe]/40">
               <motion.span 
-                className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#0c83fe]"
+                className="text-white md:text-transparent md:bg-clip-text md:bg-gradient-to-r md:from-white md:to-[#0c83fe]"
                 animate={{
                   opacity: [0.7, 1]
                 }}
