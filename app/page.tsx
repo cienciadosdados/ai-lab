@@ -34,7 +34,7 @@ export default function Page() {
                     </h1>
                   </div>
                 </div>
-                <SonarBadge text="Build for the future" className="mb-6" />
+                <SonarBadge text="Construa o Futuro com IA" className="mb-6" />
                 <h2 className="text-4xl md:text-6xl font-bold mobile-optimized-text">
                   <span className="inline-block" style={{color: '#ffffff'}}>Aplicações de IA Avançadas</span>
                   {/* Atualizado em 04/03/2025 para forçar novo deploy */}
@@ -45,7 +45,7 @@ export default function Page() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-xl text-gray-300 max-w-2xl mx-auto"
+                className="text-xl text-gray-300 max-w-2xl mx-auto description-text"
               >
                 Aprenda na prática a desenvolver soluções avançadas com{" "}
                 <span className="text-[#0c83fe]">LLM</span>,{" "}

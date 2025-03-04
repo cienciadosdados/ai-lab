@@ -337,9 +337,10 @@ img.loaded {
   }
   
   /* Melhorar legibilidade do texto */
-  p, li {
+  p:not(.description-text), li {
     line-height: 1.7 !important;
     letter-spacing: 0.01em !important;
+    font-size: 1.1rem !important;
   }
   
   /* Otimização específica para o título principal */
@@ -349,6 +350,13 @@ img.loaded {
     letter-spacing: -0.02em !important;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
     margin-bottom: 1rem !important;
+  }
+  
+  /* Tamanho específico para o texto de descrição principal */
+  .description-text {
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 1.25rem !important;
   }
 }
 
