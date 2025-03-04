@@ -5,12 +5,20 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FloatingGrid } from '@/components/ui/floating-grid';
 import { SonarBadge } from '@/components/ui/sonar-badge';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 
 // Componente que usa useSearchParams
 function ThankYouContent() {
   const searchParams = useSearchParams();
   const email = searchParams.get('email') || '';
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      window.location.href = 'https://chat.whatsapp.com/Fx7HY7BpPLt43Jsmv7caBy';
+    }, 6000);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   return (
     <div className="container mx-auto px-4 py-16 relative z-10">
