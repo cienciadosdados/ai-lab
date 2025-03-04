@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import Script from 'next/script';
+import './mobile-optimizations.css';
 import { inter } from './fonts';
+import Script from 'next/script';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -232,10 +233,57 @@ export default function RootLayout({
             src="https://www.facebook.com/tr?id=XXXXXXXXXXXXXXXXX&ev=PageView&noscript=1"
           />
         </noscript>
+        
+        {/* Preload critical resources */}
+        <link rel="preload" as="image" href="/hero-bg.webp" />
+        <link rel="preload" as="font" href="/fonts/inter-var.woff2" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        
+        {/* Meta tags for performance */}
+        <meta httpEquiv="x-dns-prefetch-control" content="on" />
+        <meta name="theme-color" content="#000000" />
+        
+        {/* Inline critical CSS */}
+        <style dangerouslySetInnerHTML={{ __html: `
+          body { background-color: #000; color: #fff; }
+          .critical-hidden { opacity: 0; }
+          .critical-visible { opacity: 1; transition: opacity 0.3s; }
+        `}} />
       </head>
       <body className={inter.className}>
         {/* Conteúdo principal primeiro, scripts depois */}
         {children}
+        
+        {/* Carregar scripts não-críticos de forma assíncrona */}
+        <Script 
+          src="/text-updater.js" 
+          strategy="afterInteractive" 
+          async 
+        />
+        <Script 
+          src="/cache-buster.js" 
+          strategy="afterInteractive" 
+          async 
+        />
+        
+        {/* Carregar service worker */}
+        <Script id="register-sw" strategy="afterInteractive">
+          {`
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(
+                  function(registration) {
+                    console.log('ServiceWorker registration successful');
+                  },
+                  function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                  }
+                );
+              });
+            }
+          `}
+        </Script>
         
         {/* Scripts de otimização */}
         <script src="/register-sw.js" async defer />

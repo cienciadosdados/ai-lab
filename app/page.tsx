@@ -62,6 +62,7 @@ export default function Page() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
                 className="w-full max-w-2xl mx-auto"
+                id="lead-form-container"
               >
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-2xl blur-2xl" />

@@ -1,141 +1,149 @@
-// Service Worker para cache e melhoria de performance
-const CACHE_NAME = 'ai-lab-cache-v4';
-const STATIC_CACHE_NAME = 'ai-lab-static-v4';
-const DYNAMIC_CACHE_NAME = 'ai-lab-dynamic-v4';
+// Service Worker para AI Lab
+const CACHE_NAME = 'ai-lab-cache-v2025-03-04-2';
 
-// Recursos estáticos críticos para pré-cache
-const STATIC_ASSETS = [
+// Recursos para pré-cache (críticos para o LCP)
+const PRECACHE_URLS = [
   '/',
   '/index.html',
-  '/obrigado/',
-  '/obrigado/index.html',
-  '/favicon.ico',
   '/manifest.json',
-  '/images/hero-bg.webp',
-  '/images/logo.png',
-  '/register-sw.js',
-  '/image-optimizer.js'
+  '/hero-bg.webp',
+  '/fonts/inter-var.woff2',
+  '/favicon.ico',
+  '/apple-icon.png',
 ];
 
-// Recursos que devem ser cacheados com estratégia de cache-first
-const CACHE_FIRST_PATTERNS = [
-  /\.(jpg|jpeg|png|gif|webp|svg|ico)$/,
-  /\.(css|js)$/,
-  /^\/fonts\//,
-  /^\/images\//,
-  /^\/static\//,
-  /^\/_next\/static\//,
-  /^\/_next\/image\//
-];
-
-// Função para verificar se uma URL deve usar cache-first
-function shouldUseCacheFirst(url) {
-  return CACHE_FIRST_PATTERNS.some(pattern => pattern.test(url));
-}
-
-// Instalar o service worker e pré-cachear recursos estáticos
-self.addEventListener('install', event => {
+// Instalação do Service Worker
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE_NAME)
-      .then(cache => {
-        console.log('Caching static assets');
-        return cache.addAll(STATIC_ASSETS);
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        console.log('Cache aberto');
+        return cache.addAll(PRECACHE_URLS);
       })
-      .then(() => self.skipWaiting()) // Força a ativação imediata
+      .then(() => self.skipWaiting())
   );
 });
 
-// Limpar caches antigos quando uma nova versão do service worker é ativada
-self.addEventListener('activate', event => {
+// Ativação do Service Worker
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
+    caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames
-          .filter(cacheName => 
-            cacheName.startsWith('ai-lab-') && 
-            cacheName !== STATIC_CACHE_NAME && 
-            cacheName !== DYNAMIC_CACHE_NAME
-          )
-          .map(cacheName => {
-            console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          })
+        cacheNames.filter((cacheName) => {
+          return cacheName !== CACHE_NAME;
+        }).map((cacheName) => {
+          console.log('Eliminando cache antigo:', cacheName);
+          return caches.delete(cacheName);
+        })
       );
-    })
-    .then(() => self.clients.claim()) // Controla todas as páginas imediatamente
+    }).then(() => self.clients.claim())
   );
 });
 
-// Estratégia de cache para requisições
-self.addEventListener('fetch', event => {
-  // Ignorar requisições não GET ou para APIs
-  if (event.request.method !== 'GET' || event.request.url.includes('/api/')) {
-    return;
+// Estratégia de cache para recursos estáticos
+const staticCacheStrategy = async (request) => {
+  const cache = await caches.open(CACHE_NAME);
+  const cachedResponse = await cache.match(request);
+  
+  if (cachedResponse) {
+    return cachedResponse;
   }
+  
+  try {
+    const networkResponse = await fetch(request);
+    
+    // Salvar no cache apenas se for uma resposta válida
+    if (networkResponse.ok) {
+      // Clone a resposta antes de colocá-la no cache
+      cache.put(request, networkResponse.clone());
+    }
+    
+    return networkResponse;
+  } catch (error) {
+    console.error('Falha ao buscar recurso:', error);
+    // Retornar resposta de fallback ou null
+    return new Response('Erro de rede', { status: 408, headers: { 'Content-Type': 'text/plain' } });
+  }
+};
 
+// Estratégia de cache para imagens
+const imagesCacheStrategy = async (request) => {
+  const cache = await caches.open(CACHE_NAME);
+  const cachedResponse = await cache.match(request);
+  
+  if (cachedResponse) {
+    // Buscar atualização em segundo plano
+    fetch(request)
+      .then(networkResponse => {
+        if (networkResponse.ok) {
+          cache.put(request, networkResponse);
+        }
+      })
+      .catch(error => console.error('Erro ao atualizar cache de imagem:', error));
+    
+    return cachedResponse;
+  }
+  
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse.ok) {
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (error) {
+    console.error('Falha ao buscar imagem:', error);
+    return new Response('Erro ao carregar imagem', { status: 408, headers: { 'Content-Type': 'text/plain' } });
+  }
+};
+
+// Interceptação de requisições
+self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   
-  // Estratégia cache-first para recursos estáticos
-  if (shouldUseCacheFirst(url.pathname)) {
-    event.respondWith(
-      caches.match(event.request)
-        .then(response => {
-          // Cache hit - retorna a resposta do cache
-          if (response) {
-            return response;
-          }
-
-          // Cache miss - busca da rede e armazena no cache
-          return fetch(event.request).then(networkResponse => {
-            if (!networkResponse || networkResponse.status !== 200) {
-              return networkResponse;
-            }
-
-            // Clonar a resposta antes de armazenar no cache
-            const responseToCache = networkResponse.clone();
-            caches.open(STATIC_CACHE_NAME).then(cache => {
-              cache.put(event.request, responseToCache);
-            });
-
-            return networkResponse;
-          });
-        })
-    );
-  } 
-  // Estratégia network-first para outros recursos
-  else {
-    event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          // Clonar a resposta antes de armazenar no cache
-          const responseToCache = response.clone();
-          
-          caches.open(DYNAMIC_CACHE_NAME).then(cache => {
-            cache.put(event.request, responseToCache);
-          });
-          
-          return response;
-        })
-        .catch(() => {
-          // Se a rede falhar, tenta buscar do cache
-          return caches.match(event.request);
-        })
-    );
+  // Ignorar requisições de análise e rastreamento
+  if (url.hostname.includes('google-analytics.com') || 
+      url.hostname.includes('googletagmanager.com') ||
+      url.hostname.includes('facebook.com')) {
+    return;
+  }
+  
+  // Aplicar estratégia baseada no tipo de recurso
+  if (event.request.method === 'GET') {
+    // Estratégia para imagens
+    if (event.request.destination === 'image') {
+      event.respondWith(imagesCacheStrategy(event.request));
+    } 
+    // Estratégia para recursos estáticos
+    else if (
+      event.request.destination === 'style' || 
+      event.request.destination === 'script' || 
+      event.request.destination === 'font' ||
+      url.pathname.endsWith('.css') || 
+      url.pathname.endsWith('.js') || 
+      url.pathname.endsWith('.woff2')
+    ) {
+      event.respondWith(staticCacheStrategy(event.request));
+    }
+    // Estratégia para HTML (navegação)
+    else if (event.request.mode === 'navigate') {
+      event.respondWith(
+        fetch(event.request)
+          .catch(() => caches.match('/'))
+      );
+    }
   }
 });
 
-// Pré-cachear páginas principais quando o usuário está online
-self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'CACHE_PAGES') {
-    const pagesToCache = event.data.payload.urls || [];
-    
-    caches.open(STATIC_CACHE_NAME).then(cache => {
-      cache.addAll(pagesToCache).then(() => {
-        console.log('Pages pre-cached successfully');
-        if (event.ports && event.ports[0]) {
-          event.ports[0].postMessage({ success: true });
-        }
+// Pré-buscar recursos quando online
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'PREFETCH_RESOURCES') {
+    const urls = event.data.urls;
+    if (urls && Array.isArray(urls)) {
+      caches.open(CACHE_NAME).then((cache) => {
+        cache.addAll(urls).then(() => {
+          console.log('Recursos pré-buscados com sucesso');
+        });
       });
-    });
+    }
   }
 });

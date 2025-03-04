@@ -11,6 +11,7 @@ interface OptimizedImageProps {
   priority?: boolean;
   quality?: number;
   lowQualitySrc?: string;
+  blurDataURL?: string;
 }
 
 export const OptimizedImage: React.FC<OptimizedImageProps> = ({
@@ -23,6 +24,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   priority = false,
   quality = 75,
   lowQualitySrc,
+  blurDataURL,
 }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isLowBandwidth, setIsLowBandwidth] = useState(false);
@@ -31,8 +33,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   useEffect(() => {
     // Detectar dispositivo móvel
     const checkMobile = () => {
-      const mobile = window.innerWidth < 768 || 
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
     };
 
@@ -88,8 +89,21 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
       priority={priority}
       quality={imageQuality}
       loading={priority ? 'eager' : 'lazy'}
-      placeholder={lowQualitySrc ? 'blur' : 'empty'}
-      blurDataURL={lowQualitySrc}
+      placeholder="blur"
+      blurDataURL={blurDataURL || "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg=="}
+      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+      fetchPriority={priority ? "high" : "auto"}
+      style={{
+        objectFit: 'cover',
+        objectPosition: 'center',
+      }}
+      onLoadingComplete={(img) => {
+        if (img.naturalWidth === 0) {
+          // Fallback para quando a imagem falha ao carregar
+          const fallbackImg = new Image();
+          fallbackImg.src = src;
+        }
+      }}
     />
   );
 };
