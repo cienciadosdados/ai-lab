@@ -1,4 +1,5 @@
 // Script para forçar a atualização de textos
+// Versão 1.1 - Atualizado em 04/03/2025 para forçar novo deploy
 document.addEventListener('DOMContentLoaded', function() {
   // Função para substituir texto em todos os elementos
   function replaceTextInElements() {
