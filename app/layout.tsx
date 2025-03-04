@@ -12,7 +12,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'AI Lab - Criando Aplicações de IA',
+  title: 'AI Lab - Aplicações de IA Avançadas',
   description: 'Aprenda a desenvolver soluções avançadas com LLM, RAG e Agentes usando ferramentas como CrewAI, langGraph, composio e Open Research.',
   icons: {
     icon: [
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   openGraph: {
-    title: 'AI Lab - Criando Aplicações de IA',
+    title: 'AI Lab - Aplicações de IA Avançadas',
     description: 'Aprenda a desenvolver soluções avançadas com LLM, RAG e Agentes usando ferramentas como CrewAI, langGraph, composio e Open Research.',
     url: 'https://ai-labs.cienciadosdados.com/',
     siteName: 'AI Lab',
