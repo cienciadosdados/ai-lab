@@ -36,9 +36,12 @@ export default function Page() {
                 </div>
                 <SonarBadge text="Build for the future" className="mb-6" />
                 <h2 className="text-4xl md:text-6xl font-bold">
-                  <span className="inline-block">Aplicações de IA Avançadas</span>
+                  <span className="inline-block" style={{color: '#0c83fe'}}>Aplicações de IA Avançadas</span>
                   {/* Atualizado em 04/03/2025 para forçar novo deploy */}
                 </h2>
+                <h3 className="text-2xl md:text-3xl mt-2 text-gray-300">
+                  Versão 2025.03.04
+                </h3>
               </div>
               
               <motion.p
