@@ -15,7 +15,7 @@ function ThankYouContent() {
   useEffect(() => {
     const timer = setTimeout(() => {
       window.location.href = 'https://chat.whatsapp.com/Fx7HY7BpPLt43Jsmv7caBy';
-    }, 6000);
+    }, 12000);
     
     return () => clearTimeout(timer);
   }, []);
