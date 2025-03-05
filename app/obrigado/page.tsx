@@ -14,7 +14,7 @@ function ThankYouContent() {
   
   useEffect(() => {
     const timer = setTimeout(() => {
-      window.location.href = 'https://chat.whatsapp.com/Fx7HY7BpPLt43Jsmv7caBy';
+      window.location.href = 'https://sendflow.pro/i/ai-lab';
     }, 12000);
     
     return () => clearTimeout(timer);
@@ -88,7 +88,7 @@ function ThankYouContent() {
               {
                 title: "Entre no Grupo do WhatsApp",
                 description: "Para garantir que você receberá todos os scripts dos projetos, é importante que esteja no grupo EXCLUSIVO, pois será nosso REPO oficial.",
-                link: "https://chat.whatsapp.com/Fx7HY7BpPLt43Jsmv7caBy",
+                link: "https://sendflow.pro/i/ai-lab",
                 buttonText: "PARTICIPAR DO GRUPO EXCLUSIVO"
               },
               {
