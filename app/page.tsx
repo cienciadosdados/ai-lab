@@ -230,9 +230,9 @@ export default function Page() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                nome: "João Paulo",
-                cargo: "Engenheiro de ML",
-                empresa: "Tech Corp",
+                nome: "Aparecido Diniz",
+                cargo: "Consultor",
+                empresa: "Dinizq Consultores Associados",
                 depoimento: "A Ciência dos Dados me deu as ferramentas práticas que eu precisava para implementar soluções de IA no mundo real."
               },
               {
