@@ -95,13 +95,13 @@ export default function Page() {
             {[
               {
                 dia: "Dia 1",
-                titulo: "Introdução aos LLMs e RAG",
-                descricao: "Crie uma aplicação de Q&A com LLM e RAG, aprenda sobre transformers, embeddings e vector DBs."
+                titulo: "Agentes de IA",
+                descricao: "Crie e implemente agentes de IA com LLM e RAG, utilizando transformers, embeddings e bancos de dados vetoriais para automação inteligente e tomada de decisão."
               },
               {
                 dia: "Dia 2",
                 titulo: "LLM e RAG Avançado",
-                descricao: "Aplicação avançada com LLM de ponta, embeddings e vector DBs"
+                descricao: "Aplicação avançada com LLM's de ponta, modelos de embeddings e vector DBs profissionais."
               },
               {
                 dia: "Dia 3",
