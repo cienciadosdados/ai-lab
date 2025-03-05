@@ -223,7 +223,7 @@ export default function Page() {
               O Que Dizem Nossos Alunos
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Histórias de sucesso de quem já participou do AI Lab.
+              Histórias de sucesso de quem já participou dos treinamentos.
             </p>
           </motion.div>
 
