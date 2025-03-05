@@ -230,22 +230,22 @@ export default function Page() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                nome: "Pedro Silva",
+                nome: "João Paulo",
                 cargo: "Engenheiro de ML",
                 empresa: "Tech Corp",
-                depoimento: "O AI Lab me deu as ferramentas práticas que eu precisava para implementar soluções de IA no mundo real."
+                depoimento: "A Ciência dos Dados me deu as ferramentas práticas que eu precisava para implementar soluções de IA no mundo real."
               },
               {
                 nome: "Ana Costa",
                 cargo: "Tech Lead",
                 empresa: "Startup XYZ",
-                depoimento: "A abordagem hands-on do curso é fantástica. Consegui implementar um agente de IA logo na primeira semana."
+                depoimento: "A abordagem hands-on do curso do Eduardo é fantástica. Consegui implementar um agente de IA logo na primeira semana."
               },
               {
-                nome: "Lucas Santos",
-                cargo: "Desenvolvedor Senior",
-                empresa: "AI Solutions",
-                depoimento: "O conhecimento em RAG e LLMs que adquiri no AI Lab transformou a maneira como construo aplicações."
+                nome: "Paulo Mazzia",
+                cargo: "Head de Inteligência de Negócios",
+                empresa: "Paipe",
+                depoimento: "O conhecimento em RAG e LLMs que adquiri com a Ciência dos Dados transformou a maneira como construir aplicações."
               }
             ].map((depoimento, index) => (
               <motion.div
