@@ -236,9 +236,9 @@ export default function Page() {
                 depoimento: "A Ciência dos Dados me deu as ferramentas práticas que eu precisava para implementar soluções de IA no mundo real."
               },
               {
-                nome: "Ana Costa",
-                cargo: "Tech Lead",
-                empresa: "Startup XYZ",
+                nome: "Claudiomir José",
+                cargo: "Tech",
+                empresa: "cjs@agent Crypto",
                 depoimento: "A abordagem hands-on do curso do Eduardo é fantástica. Consegui implementar um agente de IA logo na primeira semana."
               },
               {
