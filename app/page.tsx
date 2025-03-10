@@ -67,7 +67,7 @@ export default function Page() {
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-2xl blur-2xl" />
                   <div className="relative bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8">
-                    <h3 className="text-2xl font-bold mb-6 text-center">Garanta Sua Vaga Agora!</h3>
+                    <h3 className="text-2xl font-bold mb-6 text-center">Garanta Sua Vaga Agora! De 13 a 20/03</h3>
                     <p className="text-gray-400 mb-8 text-center">Vagas Limitadas - Turma Exclusiva - 100% online e Gratuito</p>
                     <div className="max-w-md mx-auto">
                       <LeadForm />
@@ -290,7 +290,7 @@ export default function Page() {
               <div className="absolute inset-0 bg-gradient-to-r from-[#0c83fe]/20 to-[#0c83fe]/20 rounded-2xl blur-2xl" />
               <div className="relative bg-black/40 backdrop-blur-sm p-8 rounded-2xl border border-[#0c83fe]/20">
                 <div className="mb-8 text-center">
-                  <h2 className="text-2xl font-bold mb-2">Garanta Sua Vaga Agora!</h2>
+                  <h2 className="text-2xl font-bold mb-2">Garanta Sua Vaga Agora! De 13 a 20/03</h2>
                   <p className="text-gray-400">Vagas Limitadas - Turma Exclusiva - 100% online e Gratuito</p>
                 </div>
                 <LeadForm />
