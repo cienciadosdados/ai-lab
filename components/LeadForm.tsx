@@ -1,8 +1,79 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
+
+interface WebhookData {
+  email: string;
+  phone: string;
+  source: string;
+  utm_source: string;
+  utm_medium: string;
+  utm_campaign: string;
+  date: string;
+}
 
 const LeadForm = memo(function LeadForm() {
+  // Função para enviar dados ao webhook do n8n de forma silenciosa
+  const sendToWebhook = (email: string, phone: string): void => {
+    try {
+      const data: WebhookData = {
+        email,
+        phone,
+        source: window.location.href,
+        utm_source: new URLSearchParams(window.location.search).get('utm_source') || '',
+        utm_medium: new URLSearchParams(window.location.search).get('utm_medium') || '',
+        utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign') || '',
+        date: new Date().toISOString()
+      };
+      
+      // Usando um beacon para envio não-bloqueante (funciona como um pixel)
+      const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
+      navigator.sendBeacon('https://n8n-n8n.sw7doq.easypanel.host/webhook/b0c23b1c-c818-4c27-90ce-116f3bfc69c4', blob);
+      
+      // Fallback para fetch caso sendBeacon não seja suportado
+      if (!navigator.sendBeacon) {
+        fetch('https://n8n-n8n.sw7doq.easypanel.host/webhook/b0c23b1c-c818-4c27-90ce-116f3bfc69c4', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+          // Não esperar pela resposta
+          keepalive: true
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao enviar dados para webhook complementar:', error);
+      // Não interferir no fluxo principal mesmo se houver erro
+    }
+  };
+  
+  // Hook para capturar a submissão do formulário sem interferir no fluxo original
+  useEffect(() => {
+    const form = document.querySelector('form[klicksend-form-id="7auoBJ9"]') as HTMLFormElement;
+    
+    if (form) {
+      const originalSubmitHandler = form.onsubmit;
+      
+      form.addEventListener('submit', function(e) {
+        // Não prevenir comportamento padrão
+        const emailInput = form.querySelector('input[name="email"]') as HTMLInputElement;
+        const phoneInput = form.querySelector('input[name="phone"]') as HTMLInputElement;
+        
+        if (emailInput && phoneInput) {
+          // Enviar dados ao webhook em paralelo
+          sendToWebhook(emailInput.value, phoneInput.value);
+        }
+        
+        // Continuar com o fluxo normal - sem interferir no comportamento original
+        if (originalSubmitHandler) {
+          return originalSubmitHandler.call(form, e);
+        }
+        return true;
+      });
+    }
+  }, []);
+
   return (
     <div className="hotmart-form-container">
       <form 
